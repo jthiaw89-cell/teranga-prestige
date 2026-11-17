@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr" class="light">
+  <head>
+    <script>
+      (function() {
+        function makeWritable(target, prop) {
+          try {
+            var desc = Object.getOwnPropertyDescriptor(target, prop);
+            if (!desc || desc.configurable) {
+              var val = target[prop];
+              Object.defineProperty(target, prop, {
+                configurable: true,
+                enumerable: true,
+                get: function() { return val; },
+                set: function(newVal) { val = newVal; }
+              });
+            }
+          } catch (e) {}
+        }
+        makeWritable(window, 'fetch');
+        makeWritable(window, 'XMLHttpRequest');
+        try {
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            makeWritable(Window.prototype, 'fetch');
+            makeWritable(Window.prototype, 'XMLHttpRequest');
+          }
+        } catch (e) {}
+
+        window.addEventListener('error', function(event) {
+          if (
+            (event.filename && event.filename.indexOf('chrome-extension://') !== -1) ||
+            (event.message && (
+              event.message.indexOf('Cannot set property fetch') !== -1 ||
+              event.message.indexOf('frame_ant') !== -1
+            ))
+          ) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teranga Prestige Digital</title>
+    <meta name="description" content="Plateforme SaaS multi-organisations souveraine unifiant Bureau numérique, Événementiel et Formation professionnelle." />
+    <meta property="og:title" content="Teranga Prestige Digital" />
+    <meta property="og:description" content="Plateforme SaaS multi-organisations souveraine unifiant Bureau numérique, Événementiel et Formation professionnelle." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased font-sans selection:bg-sky-500/20 selection:text-sky-900">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

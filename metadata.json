@@ -1,0 +1,6 @@
+{
+  "name": "Teranga Prestige Digital",
+  "description": "Plateforme SaaS multi-organisations souveraine unifiant Bureau numérique, Événementiel et Formation professionnelle.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
