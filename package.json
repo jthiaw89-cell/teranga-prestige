@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "tsx server/index.ts",
+    "start": "NODE_ENV=production tsx server/index.ts",
     "accounting:api": "tsx server/index.ts",
     "accounting:migrate": "tsx server/migrate.ts",
     "accounting:bootstrap": "tsx server/bootstrapAdmin.ts",
