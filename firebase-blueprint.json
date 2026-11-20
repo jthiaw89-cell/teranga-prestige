@@ -1,0 +1,499 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public workspace profile metadata for an authenticated user.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["OWNER", "DIRECTION", "MANAGER", "EMPLOYEE", "ACCOUNTANT", "READ_ONLY", "LEARNER", "INSTRUCTOR", "PROVIDER", "SUPERADMIN", "SECURITY_ADMIN"]
+        },
+        "space": {
+          "type": "string",
+          "enum": ["intranet", "accounting", "learner", "instructor", "provider", "superadmin"]
+        },
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "organizationName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "role", "space", "organizationId", "organizationName", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII record for a user (email, phone, photoUrl).",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "photoUrl": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "AdminRegistry": {
+      "title": "AdminRegistry",
+      "description": "Trusted registry mapping platform admin UIDs.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "grantedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "grantedAt"]
+    },
+    "Workspace": {
+      "title": "Workspace",
+      "description": "Organization workspace root owned by a verified user.",
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "sector": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "ninea": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "accentColor": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["workspaceId", "ownerId", "name", "createdAt", "updatedAt"]
+    },
+    "WorkspaceMember": {
+      "title": "WorkspaceMember",
+      "description": "Membership record inside a workspace used for Master Gate access checks.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["OWNER", "ADMIN", "MANAGER", "MEMBER"]
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "workspaceId", "role", "displayName", "joinedAt"]
+    },
+    "CrmContact": {
+      "title": "CrmContact",
+      "description": "CRM prospect or client organization record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "company": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "sector": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "stage": { "type": "string", "enum": ["PROSPECT", "QUALIFIE", "PROPOSITION", "GAGNE", "PERDU"] },
+        "estimatedValueFcfa": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "name", "company", "sector", "stage", "estimatedValueFcfa", "createdAt", "updatedAt"]
+    },
+    "CrmDocument": {
+      "title": "CrmDocument",
+      "description": "Commercial document (Devis, Commande, BL, Facture client/fournisseur).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "docType": { "type": "string", "enum": ["DEVIS", "COMMANDE_CLIENT", "BON_LIVRAISON", "FACTURE_CLIENT", "COMMANDE_FOURNISSEUR", "FACTURE_FOURNISSEUR"] },
+        "reference": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tierName": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "totalHt": { "type": "number" },
+        "tvaAmount": { "type": "number" },
+        "totalTtc": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["BROUILLON", "EMIS", "PARTIEL", "PAYE", "VALIDE", "ANNULE"] },
+        "issueDate": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "docType", "reference", "tierName", "totalHt", "tvaAmount", "totalTtc", "paidAmount", "status", "issueDate", "createdAt", "updatedAt"]
+    },
+    "MarketingCampaign": {
+      "title": "MarketingCampaign",
+      "description": "Multi-channel marketing & retargeting campaign.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "objective": { "type": "string", "maxLength": 60 },
+        "channel": { "type": "string", "enum": ["WHATSAPP", "SMS", "EMAIL", "PUSH", "MULTI"] },
+        "audienceName": { "type": "string", "maxLength": 140 },
+        "status": { "type": "string", "enum": ["DRAFT", "ACTIVE", "PAUSED", "COMPLETED"] },
+        "targetCount": { "type": "number" },
+        "dispatchedCount": { "type": "number" },
+        "convertedCount": { "type": "number" },
+        "revenueRecoveredFcfa": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "name", "objective", "channel", "audienceName", "status", "targetCount", "dispatchedCount", "convertedCount", "revenueRecoveredFcfa", "createdAt", "updatedAt"]
+    },
+    "MissionOrder": {
+      "title": "MissionOrder",
+      "description": "Mission order and expense tracking record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "reference": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "destination": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "agentName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "startDate": { "type": "string", "maxLength": 30 },
+        "endDate": { "type": "string", "maxLength": 30 },
+        "totalFcfa": { "type": "number" },
+        "status": { "type": "string", "enum": ["BROUILLON", "SOUMIS", "APPROUVE", "EN_COURS", "CLOTURE", "REJETE"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "reference", "title", "destination", "agentName", "startDate", "endDate", "totalFcfa", "status", "createdAt", "updatedAt"]
+    },
+    "WorkReport": {
+      "title": "WorkReport",
+      "description": "Mission or work activity report created by employees, managers, or directors.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "reference": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "reportType": { "type": "string", "enum": ["MISSION", "TRAVAIL", "DIRECTION", "HEBDO"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "summary": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["BROUILLON", "SOUMIS", "VALIDE", "ARCHIVE"] },
+        "periodLabel": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "reference", "reportType", "title", "authorName", "summary", "status", "periodLabel", "createdAt", "updatedAt"]
+    },
+    "TaskItem": {
+      "title": "TaskItem",
+      "description": "Kanban task item.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "category": { "type": "string", "maxLength": 60 },
+        "priority": { "type": "string", "enum": ["BASSE", "MOYENNE", "HAUTE", "URGENTE"] },
+        "status": { "type": "string", "enum": ["A_FAIRE", "EN_COURS", "EN_REVUE", "TERMINE"] },
+        "assigneeName": { "type": "string", "maxLength": 120 },
+        "dueDate": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "title", "category", "priority", "status", "assigneeName", "dueDate", "createdAt", "updatedAt"]
+    },
+    "PlanningEvent": {
+      "title": "PlanningEvent",
+      "description": "Scheduled calendar or agenda event.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "eventType": { "type": "string", "enum": ["REUNION", "RENDEZ_VOUS", "ECHEANCE", "FORMATION", "PRESTATION"] },
+        "status": { "type": "string", "enum": ["PLANIFIE", "CONFIRME", "TERMINE", "ANNULE"] },
+        "date": { "type": "string", "maxLength": 30 },
+        "startHour": { "type": "number" },
+        "durationHours": { "type": "number" },
+        "location": { "type": "string", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "title", "eventType", "status", "date", "startHour", "durationHours", "location", "createdAt", "updatedAt"]
+    },
+    "GedDocumentMeta": {
+      "title": "GedDocumentMeta",
+      "description": "Metadata for a GED document stored in the vault (binary data excluded to respect 1MB limit).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "category": { "type": "string", "maxLength": 80 },
+        "fileName": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "mimeType": { "type": "string", "maxLength": 120 },
+        "sizeBytes": { "type": "number" },
+        "version": { "type": "number" },
+        "confidentiality": { "type": "string", "enum": ["PUBLIC", "INTERNE", "CONFIDENTIEL", "SECRET"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "title", "category", "fileName", "mimeType", "sizeBytes", "version", "confidentiality", "createdAt", "updatedAt"]
+    },
+    "AccountingEntryMeta": {
+      "title": "AccountingEntryMeta",
+      "description": "SYSCOHADA accounting entry summary record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "entryNumber": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "journalCode": { "type": "string", "minLength": 1, "maxLength": 20 },
+        "entryDate": { "type": "string", "maxLength": 30 },
+        "reference": { "type": "string", "maxLength": 80 },
+        "description": { "type": "string", "maxLength": 240 },
+        "totalDebit": { "type": "number" },
+        "totalCredit": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "entryNumber", "journalCode", "entryDate", "reference", "description", "totalDebit", "totalCredit", "createdAt", "updatedAt"]
+    },
+    "TeamsChannelMeta": {
+      "title": "TeamsChannelMeta",
+      "description": "Teams collaboration channel metadata.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "kind": { "type": "string", "enum": ["CHANNEL", "PROJECT", "ONBOARDING", "FORMATION", "GROUP", "DM"] },
+        "topic": { "type": "string", "maxLength": 300 },
+        "isPrivate": { "type": "boolean" },
+        "lastMessageAt": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "name", "kind", "topic", "isPrivate", "lastMessageAt", "createdAt", "updatedAt"]
+    },
+    "TeamsMessageMeta": {
+      "title": "TeamsMessageMeta",
+      "description": "Teams channel or direct message record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "channelId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "senderName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "senderRole": { "type": "string", "maxLength": 60 },
+        "content": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "channelId", "senderName", "senderRole", "content", "createdAt"]
+    },
+    "LeaveRequestMeta": {
+      "title": "LeaveRequestMeta",
+      "description": "HR leave request record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "employeeName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "leaveType": { "type": "string", "maxLength": 40 },
+        "startDate": { "type": "string", "maxLength": 30 },
+        "endDate": { "type": "string", "maxLength": 30 },
+        "daysCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["EN_ATTENTE", "APPROUVE", "REJETE", "ANNULE"] },
+        "reason": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "workspaceId", "ownerId", "employeeName", "leaveType", "startDate", "endDate", "daysCount", "status", "reason", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Public user profile metadata keyed by Firebase Auth UID."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Private PII subcollection isolated per user."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRegistry" },
+      "description": "Trusted platform admin UID registry."
+    },
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/Workspace" },
+      "description": "Organization workspace root documents."
+    },
+    "/workspaces/{workspaceId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/WorkspaceMember" },
+      "description": "Workspace membership subcollection for Master Gate authorization."
+    },
+    "/workspaces/{workspaceId}/crm_contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/CrmContact" },
+      "description": "CRM contacts and prospects for the workspace."
+    },
+    "/workspaces/{workspaceId}/crm_documents/{docId}": {
+      "schema": { "$ref": "#/entities/CrmDocument" },
+      "description": "Commercial quotes, orders, delivery slips, and invoices."
+    },
+    "/workspaces/{workspaceId}/campaigns/{campaignId}": {
+      "schema": { "$ref": "#/entities/MarketingCampaign" },
+      "description": "Multi-channel marketing & retargeting campaigns."
+    },
+    "/workspaces/{workspaceId}/missions/{missionId}": {
+      "schema": { "$ref": "#/entities/MissionOrder" },
+      "description": "Mission orders and travel expenses."
+    },
+    "/workspaces/{workspaceId}/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/WorkReport" },
+      "description": "Mission and work reports."
+    },
+    "/workspaces/{workspaceId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/TaskItem" },
+      "description": "Kanban tasks and checklists."
+    },
+    "/workspaces/{workspaceId}/planning_events/{eventId}": {
+      "schema": { "$ref": "#/entities/PlanningEvent" },
+      "description": "Unified calendar and planning entries."
+    },
+    "/workspaces/{workspaceId}/ged_documents/{gedId}": {
+      "schema": { "$ref": "#/entities/GedDocumentMeta" },
+      "description": "GED document vault metadata (files kept under 1MB limit)."
+    },
+    "/workspaces/{workspaceId}/accounting_entries/{entryId}": {
+      "schema": { "$ref": "#/entities/AccountingEntryMeta" },
+      "description": "SYSCOHADA journal entry metadata."
+    },
+    "/workspaces/{workspaceId}/teams_channels/{channelId}": {
+      "schema": { "$ref": "#/entities/TeamsChannelMeta" },
+      "description": "Teams collaboration channels and project rooms."
+    },
+    "/workspaces/{workspaceId}/teams_messages/{messageId}": {
+      "schema": { "$ref": "#/entities/TeamsMessageMeta" },
+      "description": "Teams messages posted inside workspace channels."
+    },
+    "/workspaces/{workspaceId}/leave_requests/{leaveId}": {
+      "schema": { "$ref": "#/entities/LeaveRequestMeta" },
+      "description": "HR leave requests for employees."
+    }
+  }
+}
